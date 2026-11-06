@@ -1,41 +1,41 @@
 # Introduction to Dart Programming - SET01
 
-Ứng dụng quản lý đơn hàng bằng Dart, thực hiện các yêu cầu của bài thực hành:
+A Dart order-management application built for the practical examination requirements:
 
-- Tạo model `Order`.
-- Đọc danh sách đơn hàng từ chuỗi JSON.
-- Hiển thị, thêm và tìm kiếm đơn hàng theo `ItemName`.
-- Lưu dữ liệu vào `order.json`.
-- Cung cấp giao diện web và menu console.
+- Create an `Order` model.
+- Read orders from a JSON string.
+- Display, add, and search orders by `ItemName`.
+- Persist orders in `order.json`.
+- Provide both a web interface and a console menu.
 
-## Yêu cầu
+## Requirements
 
-- Dart SDK 3.0 trở lên.
+- Dart SDK 3.0 or later.
 
-## Chạy ứng dụng
+## Run the application
 
 ```bash
 dart pub get
 dart run
 ```
 
-Ứng dụng khởi động web server tại `http://localhost:8080`. Nếu cổng này đang được sử dụng, server sẽ dùng cổng `8081`.
+The application starts a web server at `http://localhost:8080`. If that port is already in use, it uses port `8081`.
 
-Trong terminal, chọn một trong các chức năng để xem, thêm, tìm kiếm, xóa hoặc khôi phục danh sách đơn hàng.
+Use the console menu to view, add, search, delete, or reset orders.
 
-## Chạy kiểm thử
+## Run tests
 
 ```bash
 dart test
 ```
 
-## Cấu trúc project
+## Project structure
 
 ```text
-bin/main.dart           Console menu, HTTP server và API
-lib/order.dart          Model Order
-lib/order_manager.dart  Xử lý JSON, tìm kiếm và lưu file
-web/index.html          Giao diện web
+bin/main.dart           Console menu, HTTP server, and API
+lib/order.dart          Order model
+lib/order_manager.dart  JSON, search, and file-persistence logic
+web/index.html          Web user interface
 test/order_test.dart    Unit tests
-order.json              Dữ liệu đơn hàng
+order.json              Order data
 ```
