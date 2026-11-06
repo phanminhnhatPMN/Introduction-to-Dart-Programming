@@ -1,0 +1,15 @@
+name: dart_exam_set01
+description: Introduction to Dart Programming - Exam Paper SET01 (FPT Aptech)
+version: 1.0.0
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  # Using standard dart:io, dart:convert (built-in Dart SDK)
+  # Zero external dependencies for maximum reliability and offline grading
+
+dev_dependencies:
+  lints: ^3.0.0
+  test: ^1.25.0
+

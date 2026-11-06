@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Order</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #333333;
+      padding: 30px 20px 60px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 860px;
+    }
+
+    .title {
+      text-align: center;
+      color: #C68630;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 28px;
+      letter-spacing: -0.3px;
+    }
+
+    .form-container {
+      margin-bottom: 25px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 14px;
+    }
+
+    .form-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-size: 13.5px;
+      color: #6c757d;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      height: 38px;
+      padding: 6px 12px;
+      font-size: 14px;
+      border: 1px solid #c9c9c9;
+      border-radius: 3px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background-color: #fff;
+    }
+
+    .form-group input:focus {
+      border-color: #C45D43;
+      box-shadow: 0 0 0 2px rgba(196, 93, 67, 0.15);
+    }
+
+    .form-group input::placeholder {
+      color: #b5b5b5;
+    }
+
+    .btn-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+      margin-bottom: 25px;
+    }
+
+    .btn-add {
+      background-color: #C45D43;
+      color: #ffffff;
+      border: none;
+      padding: 8px 18px;
+      font-size: 13.5px;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-add:hover {
+      background-color: #b14f36;
+    }
+
+    .btn-add:active {
+      transform: scale(0.98);
+    }
+
+    .search-panel {
+      background-color: #fbfbfc;
+      border: 1px solid #eaeaea;
+      border-radius: 4px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .search-panel label {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #555;
+      white-space: nowrap;
+    }
+
+    .search-panel input {
+      flex: 1;
+      height: 36px;
+      padding: 6px 12px;
+      font-size: 13.5px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      outline: none;
+    }
+
+    .search-panel input:focus {
+      border-color: #C45D43;
+    }
+
+    .btn-search {
+      background-color: #555;
+      color: #fff;
+      border: none;
+      height: 36px;
+      padding: 0 14px;
+      font-size: 13px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+
+    .btn-search:hover {
+      background-color: #333;
+    }
+
+    .btn-reset {
+      background-color: #f1f1f1;
+      color: #444;
+      border: 1px solid #ccc;
+      height: 36px;
+      padding: 0 12px;
+      font-size: 13px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+
+    .btn-reset:hover {
+      background-color: #e2e2e2;
+    }
+
+    .toast {
+      display: none;
+      padding: 10px 14px;
+      border-radius: 4px;
+      font-size: 13px;
+      margin-bottom: 15px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .toast.success {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #c8e6c9;
+    }
+
+    .toast.error {
+      background-color: #ffebee;
+      color: #c62828;
+      border: 1px solid #ffcdd2;
+    }
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin-bottom: 35px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    thead tr {
+      background-color: #C45D43;
+      color: #ffffff;
+    }
+
+    thead th {
+      padding: 10px 14px;
+      font-size: 13.5px;
+      font-weight: 600;
+      border: none;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #f2f2f2;
+      transition: background-color 0.15s;
+    }
+
+    tbody tr:hover {
+      background-color: #fcfcfc;
+    }
+
+    tbody td {
+      padding: 12px 14px;
+      font-size: 13.5px;
+      color: #555555;
+    }
+
+    .action-cell {
+      text-align: center;
+      width: 45px;
+    }
+
+    .btn-delete {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #999;
+      padding: 4px 6px;
+      border-radius: 3px;
+      transition: color 0.2s, background-color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-delete:hover {
+      color: #d32f2f;
+      background-color: #fee;
+    }
+
+    .btn-delete svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 30px;
+      color: #888;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .footer-banner {
+      background-color: #C45D43;
+      color: #ffffff;
+      text-align: center;
+      padding: 10px 16px;
+      border-radius: 4px;
+      font-size: 13.5px;
+      font-weight: 700;
+      margin-top: 10px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="title">My Order</h1>
+
+    <div id="toast" class="toast"></div>
+
+    <div class="form-container">
+      <form id="orderForm" onsubmit="event.preventDefault(); handleAddOrder();">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="itemInput">Item</label>
+            <input type="text" id="itemInput" placeholder="Item" required />
+          </div>
+          <div class="form-group">
+            <label for="itemNameInput">Item Name</label>
+            <input type="text" id="itemNameInput" placeholder="Item Name" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="priceInput">Price</label>
+            <input type="number" id="priceInput" step="any" placeholder="Price" required />
+          </div>
+          <div class="form-group">
+            <label for="quantityInput">Quantity</label>
+            <input type="number" id="quantityInput" placeholder="Quantity" min="1" value="1" required />
+          </div>
+          <div class="form-group">
+            <label for="currencyInput">Currency</label>
+            <input type="text" id="currencyInput" placeholder="Currency" value="USD" required />
+          </div>
+        </div>
+
+        <div class="btn-container">
+          <button type="submit" class="btn-add">Add Item to Cart</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="search-panel">
+      <label for="searchInput">Search by Item Name:</label>
+      <input type="text" id="searchInput" placeholder="Type to filter item name (e.g. Iphone)..." oninput="handleSearch()" />
+      <button type="button" class="btn-search" onclick="handleSearch()">Search</button>
+      <button type="button" class="btn-reset" onclick="handleResetSearch()">Show All</button>
+      <button type="button" class="btn-reset" style="margin-left: auto; background-color: #fff0eb; color: #b14f36; border-color: #f7c9bc;" onclick="loadExactPictureData()">Match Exam Picture</button>
+      <button type="button" class="btn-reset" onclick="resetExamDefault()">Reset Default</button>
+    </div>
+
+    <div class="table-container">
+      <table id="ordersTable">
+        <thead>
+          <tr>
+            <th style="width: 50px;">Id</th>
+            <th style="width: 110px;">Item</th>
+            <th>Item Name</th>
+            <th style="width: 90px;">Quantity</th>
+            <th style="width: 120px;">Price</th>
+            <th style="width: 100px;">Currency</th>
+            <th class="action-cell"></th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody">
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer-banner">
+      Số 8, Tôn Thất Thuyết, Cầu Giấy, Hà Nội
+    </div>
+  </div>
+
+  <script>
+    let allOrders = [];
+
+    function formatPrice(price) {
+      if (price === null || price === undefined) return '0';
+      const num = Number(price);
+      if (Number.isInteger(num)) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }
+      return num.toLocaleString('vi-VN');
+    }
+
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast ' + (isError ? 'error' : 'success');
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3500);
+    }
+
+    async function loadOrders(searchQuery = '') {
+      try {
+        const url = searchQuery 
+          ? `/api/orders?search=${encodeURIComponent(searchQuery)}`
+          : '/api/orders';
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Network response error');
+        const data = await res.json();
+        if (!searchQuery) {
+          allOrders = data;
+        }
+        renderTable(data);
+      } catch (err) {
+        console.error('Error fetching orders:', err);
+        showToast('Could not load orders from Dart server.', true);
+      }
+    }
+
+    function renderTable(orders) {
+      const tbody = document.getElementById('ordersBody');
+      tbody.innerHTML = '';
+
+      if (!orders || orders.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="empty-state">No orders found. Add a new item above!</td></tr>`;
+        return;
+      }
+
+      orders.forEach((order, index) => {
+        const tr = document.createElement('tr');
+        const displayId = order.Id || order.id || 1;
+        const item = order.Item || order.item || '';
+        const itemName = order.ItemName || order.itemName || '';
+        const quantity = order.Quantity || order.quantity || 1;
+        const price = order.Price ?? order.price ?? 0;
+        const currency = order.Currency || order.currency || 'USD';
+
+        tr.innerHTML = `
+          <td>${displayId}</td>
+          <td>${escapeHtml(item)}</td>
+          <td>${escapeHtml(itemName)}</td>
+          <td>${quantity}</td>
+          <td>${formatPrice(price)}</td>
+          <td>${escapeHtml(currency)}</td>
+          <td class="action-cell">
+            <button class="btn-delete" title="Delete Order">
+              <svg viewBox="0 0 24 24">
+                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+              </svg>
+            </button>
+          </td>
+        `;
+        tr.querySelector('.btn-delete').addEventListener('click', () => handleDeleteOrder(item));
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function handleAddOrder() {
+      const itemInput = document.getElementById('itemInput');
+      const itemNameInput = document.getElementById('itemNameInput');
+      const priceInput = document.getElementById('priceInput');
+      const quantityInput = document.getElementById('quantityInput');
+      const currencyInput = document.getElementById('currencyInput');
+
+      const newItem = {
+        Item: itemInput.value.trim(),
+        ItemName: itemNameInput.value.trim(),
+        Price: parseFloat(priceInput.value),
+        Quantity: parseInt(quantityInput.value, 10) || 1,
+        Currency: currencyInput.value.trim() || 'USD',
+        Id: 1
+      };
+
+      if (!newItem.Item || !newItem.ItemName || isNaN(newItem.Price)) {
+        showToast('Please fill all required fields correctly.', true);
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newItem)
+        });
+
+        if (res.ok) {
+          showToast(`✓ Order "${newItem.ItemName}" inserted successfully!`);
+          itemInput.value = '';
+          itemNameInput.value = '';
+          priceInput.value = '';
+          quantityInput.value = '1';
+          currencyInput.value = 'USD';
+          itemInput.focus();
+          await loadOrders();
+        } else {
+          const errData = await res.json();
+          showToast(errData.error || 'Failed to add order.', true);
+        }
+      } catch (err) {
+        console.error('Error inserting order:', err);
+        showToast('Failed to connect to Dart server.', true);
+      }
+    }
+
+    function handleSearch() {
+      const query = document.getElementById('searchInput').value.trim();
+      loadOrders(query);
+    }
+
+    function handleResetSearch() {
+      document.getElementById('searchInput').value = '';
+      loadOrders();
+    }
+
+    async function loadExactPictureData() {
+      try {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'load_demo' })
+        });
+        if (res.ok) {
+          showToast('✓ Loaded exact dataset matching exam picture (A1000 - A1008)!');
+          document.getElementById('searchInput').value = '';
+          await loadOrders();
+        }
+      } catch (err) {
+        showToast('Failed to load demo data.', true);
+      }
+    }
+
+    async function resetExamDefault() {
+      try {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'reset_default' })
+        });
+        if (res.ok) {
+          showToast('✓ Reset to default 2 items from exam paper string!');
+          document.getElementById('searchInput').value = '';
+          await loadOrders();
+        }
+      } catch (err) {
+        showToast('Failed to reset data.', true);
+      }
+    }
+
+    async function handleDeleteOrder(itemCode) {
+      if (!confirm(`Are you sure you want to remove item "${itemCode}"?`)) {
+        return;
+      }
+      try {
+        const res = await fetch(`/api/orders/${encodeURIComponent(itemCode)}`, {
+          method: 'DELETE'
+        });
+        if (res.ok) {
+          showToast(`✓ Item "${itemCode}" removed!`);
+          const query = document.getElementById('searchInput').value.trim();
+          loadOrders(query);
+        } else {
+          showToast('Failed to delete item.', true);
+        }
+      } catch (err) {
+        showToast('Server communication error.', true);
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadOrders();
+    });
+  </script>
+</body>
+</html>
